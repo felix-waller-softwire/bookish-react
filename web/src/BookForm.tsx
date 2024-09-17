@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { createBook, updateBook } from "./api.ts";
 
 export default function BookForm() {
@@ -22,7 +22,6 @@ export default function BookForm() {
       <label htmlFor="isbn">ISBN</label>
       <input type="text" id="isbn" inputMode="numeric" required value={isbn} onChange={(e) => setIsbn(e.target.value)} />
       <button type="submit">{isUpdate ? "Update" : "Create"}</button>
-      <Toaster />
     </form>
   );
 
@@ -31,6 +30,8 @@ export default function BookForm() {
 
     const res = await updateBook(book.id, title, author, isbn);
     if (!res.ok) return toast.error("Failed to update book.");
+
+    toast.success(`Updated "${title}".`)
     navigate(`/${book.id}`);
   }
 
@@ -41,6 +42,7 @@ export default function BookForm() {
     if (!res.ok) return toast.error("Failed to create book.");
 
     const { id } = await res.json();
+    toast.success(`Created "${title}".`)
     navigate(`/${id}`);
   }
 }

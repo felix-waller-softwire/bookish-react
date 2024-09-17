@@ -10,23 +10,28 @@ import './base.css'
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Books />,
-    loader: fetchBooks,
-  },
-  {
-    path: "/:id",
-    element: <Book />,
-    loader: async ({ params }) => fetchBook(params.id),
-  },
-  {
-    path: "/create",
-    element: <BookForm />,
-  },
-  {
-    path: "/:id/update",
-    element: <BookForm />,
-    loader: async ({ params }) => fetchBook(params.id),
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <Books />,
+        loader: fetchBooks,
+      },
+      {
+        path: "/:id",
+        element: <Book />,
+        loader: async ({ params }) => fetchBook(params.id),
+      },
+      {
+        path: "/create",
+        element: <BookForm key="create" />,
+      },
+      {
+        path: "/:id/update",
+        element: <BookForm key="update" />,
+        loader: async ({ params }) => fetchBook(params.id),
+      },
+    ]
   },
 ]);
 
