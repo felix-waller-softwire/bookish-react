@@ -7,3 +7,8 @@ export async function fetchBooks() {
 export async function fetchBook(id) {
 	return (await fetch(`${URI}/books/${id}`)).json();
 }
+
+export async function deleteBook(id) {
+	return await fetch(`${URI}/books/${id}`, { method: "DELETE" });
+}
+
