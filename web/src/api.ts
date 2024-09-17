@@ -12,3 +12,10 @@ export async function deleteBook(id) {
 	return await fetch(`${URI}/books/${id}`, { method: "DELETE" });
 }
 
+export async function createBook(title, author, isbn) {
+	return await fetch(`${URI}/books`, {
+		method: "POST",
+		body: JSON.stringify({ book: { title, author, isbn } }),
+		headers: { "Content-Type": "application/json" },
+	});
+}

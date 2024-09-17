@@ -13,7 +13,7 @@ class BooksController < ApplicationController
 
   def create
     @book = Book.create(book_params)
-    redirect_to book_url(@book)
+    render json: { id: @book.id }
   end
 
   def edit
