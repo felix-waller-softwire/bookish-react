@@ -19,3 +19,11 @@ export async function createBook(title, author, isbn) {
 		headers: { "Content-Type": "application/json" },
 	});
 }
+
+export async function updateBook(id, title, author, isbn) {
+	return await fetch(`${URI}/books/${id}`, {
+		method: "PATCH",
+		body: JSON.stringify({ book: { title, author, isbn } }),
+		headers: { "Content-Type": "application/json" },
+	});
+}

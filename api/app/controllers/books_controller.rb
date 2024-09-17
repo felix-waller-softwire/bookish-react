@@ -23,7 +23,7 @@ class BooksController < ApplicationController
   def update
     @book = Book.find(params[:id])
     @book.update(book_params)
-    redirect_to book_url(@book)
+    head :no_content
   end
 
   def destroy

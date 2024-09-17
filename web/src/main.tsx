@@ -23,6 +23,11 @@ const router = createBrowserRouter([
     path: "/create",
     element: <BookForm />,
   },
+  {
+    path: "/:id/update",
+    element: <BookForm />,
+    loader: async ({ params }) => fetchBook(params.id),
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
