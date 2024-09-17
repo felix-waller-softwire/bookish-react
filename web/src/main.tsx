@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.tsx'
 import Books from './Books.tsx'
-import { fetchBooks } from "./api.ts";
+import Book from './Book.tsx'
+import { fetchBooks, fetchBook } from "./api.ts";
 import './base.css'
 
 const router = createBrowserRouter([
@@ -12,6 +13,11 @@ const router = createBrowserRouter([
     element: <Books />,
     loader: fetchBooks,
   },
+  {
+    path: "/:id",
+    element: <Book />,
+    loader: async ({ params }) => fetchBook(params.id),
+  }
 ]);
 
 createRoot(document.getElementById('root')!).render(
