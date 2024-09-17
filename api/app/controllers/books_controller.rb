@@ -7,17 +7,9 @@ class BooksController < ApplicationController
     render json: Book.find(params[:id])
   end
 
-  def new
-    @book = Book.new
-  end
-
   def create
     @book = Book.create(book_params)
     render json: { id: @book.id }
-  end
-
-  def edit
-    @book = Book.find(params[:id])
   end
 
   def update
