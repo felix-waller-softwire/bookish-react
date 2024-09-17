@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 
 export default function Books() {
-  const [books, setBooks] = useState();
-
-  console.log(books)
-  
-  useEffect(() => {
-    fetch("http://localhost:3000/books")
-      .then((res) => res.json())
-      .then(setBooks)
-  }, [])
-
-  return books?.map(({ id, title, author }) => <p key={id}>{title} by {author}</p>);
+  const books = useLoaderData();
+  return books?.map(({ id, title, author }) =>
+    <p key={id}><Link to={`/${id}`}>{title}</Link> by {author}</p>);
 }
