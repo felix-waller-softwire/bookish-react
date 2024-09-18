@@ -5,7 +5,8 @@ import App from './App.tsx'
 import Books from './Books.tsx'
 import Book from './Book.tsx'
 import BookForm from "./BookForm.tsx";
-import { fetchBooks, fetchBook } from "./api.ts";
+import CopyForm from "./CopyForm.tsx";
+import { fetchBooks, fetchBook, fetchCopy } from "./api.ts";
 import './base.css'
 
 const router = createBrowserRouter([
@@ -31,6 +32,15 @@ const router = createBrowserRouter([
         element: <BookForm key="update" />,
         loader: async ({ params }) => fetchBook(params.id),
       },
+      {
+        path: "/:bookId/check-out",
+        element: <CopyForm />,
+      },
+      {
+        path: "/:bookId/copy/:id/update",
+        element: <CopyForm />,
+        loader: async ({ params }) => fetchCopy(params.id),
+      }
     ]
   },
 ]);
