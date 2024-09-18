@@ -4,7 +4,8 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: Book.find(params[:id])
+    book = Book.find(params[:id])
+    render json: book, include: [:copies]
   end
 
   def create

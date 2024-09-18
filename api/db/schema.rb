@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_17_100347) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_18_094446) do
   create_table "books", force: :cascade do |t|
     t.string "title"
     t.string "author"
     t.integer "isbn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "copies", force: :cascade do |t|
+    t.string "borrower"
+    t.date "due_date"
+    t.integer "book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_copies_on_book_id"
   end
 
 end
