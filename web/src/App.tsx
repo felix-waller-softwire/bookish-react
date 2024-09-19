@@ -7,6 +7,7 @@ function App() {
   return (
     <>
       <h1>Bookish</h1>
+      <Books />
     </>
   )
 }
