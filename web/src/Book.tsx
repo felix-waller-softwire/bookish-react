@@ -6,7 +6,7 @@ import Copies from "./Copies.tsx";
 import { BookResponse } from "./types.ts";
 
 export default function Book() {
-  const { id, title, author, isbn, copies: fetchedCopies } = useLoaderData() as BookResponse;
+  const { id, title, author, isbn, total_copies, copies: fetchedCopies } = useLoaderData() as BookResponse;
   const [ copies, setCopies ] = useState(fetchedCopies);
   const navigate = useNavigate();
 
@@ -21,7 +21,10 @@ export default function Book() {
       <button onClick={onDelete}>Delete</button>
 
       <h2>copies</h2>
-      <Link to="./check-out">Check out</Link>
+      <p>{total_copies - (copies?.length ?? 0)} / {total_copies} available</p>
+      {(copies?.length ?? 0) >= total_copies
+        ? <button onClick={onNoCopiesClicked}>Check out</button>
+        : <Link to="./check-out">Check out</Link>}
       {copies && <Copies copies={copies} onChange={onCopiesChange} />}
     </>
   );
@@ -35,5 +38,9 @@ export default function Book() {
 
   async function onCopiesChange() {
     setCopies(await fetchCopies(id));
+  }
+
+  function onNoCopiesClicked() {
+    toast.error("No copies available.");
   }
 }

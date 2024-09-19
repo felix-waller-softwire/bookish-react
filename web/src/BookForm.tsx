@@ -13,6 +13,7 @@ export default function BookForm() {
   const [title, setTitle] = useState(book?.title ?? "");
   const [author, setAuthor] = useState(book?.author ?? "");
   const [isbn, setIsbn] = useState(book?.isbn ?? "");
+  const [totalCopies, setTotalCopies] = useState(book?.total_copies ?? "");
 
   return (
     <form onSubmit={isUpdate ? onUpdate : onCreate}>
@@ -22,6 +23,8 @@ export default function BookForm() {
       <input type="text" id="author" required value={author} onChange={(e) => setAuthor(e.target.value)} />
       <label htmlFor="isbn">ISBN</label>
       <input type="text" id="isbn" inputMode="numeric" required value={isbn} onChange={(e) => setIsbn(e.target.value)} />
+      <label htmlFor="total-copies">Total copies</label>
+      <input type="text" id="total-copies" inputMode="numeric" required value={totalCopies} onChange={(e) => setTotalCopies(e.target.value)} />
       <button type="submit">{isUpdate ? "Update" : "Create"}</button>
     </form>
   );
@@ -29,7 +32,12 @@ export default function BookForm() {
   async function onUpdate(e: FormEvent<HTMLFormElement>) {
     if (!book) return onCreate(e);
     e.preventDefault();
-    const res = await updateBook(book.id, title, author, Number(isbn));
+    const res = await updateBook(book.id, {
+      title,
+      author,
+      isbn: Number(isbn),
+      total_copies: Number(totalCopies),
+    });
     if (!res.ok) return toast.error("Failed to update book.");
 
     toast.success(`Updated "${title}".`)
@@ -39,7 +47,13 @@ export default function BookForm() {
   async function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const res = await createBook(title, author, Number(isbn))
+    const res = await createBook({
+      title,
+      author,
+      isbn: Number(isbn),
+      total_copies: Number(totalCopies),
+    });
+
     if (!res.ok) return toast.error("Failed to create book.");
 
     const { id } = await res.json();

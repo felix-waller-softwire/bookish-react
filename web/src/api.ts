@@ -1,4 +1,4 @@
-import { BookResponse, BooksResponse, CopiesResponse, CopyResponse } from "./types";
+import { BookForm, BookResponse, BooksResponse, CopiesResponse, CopyForm, CopyResponse } from "./types";
 
 const URI = "http://localhost:3000";
 
@@ -18,18 +18,18 @@ export async function deleteBook(id: number) {
 	return await fetch(`${URI}/books/${id}`, { method: "DELETE" });
 }
 
-export async function createBook(title: string, author: string, isbn: number) {
+export async function createBook(book: BookForm) {
 	return await fetch(`${URI}/books`, {
 		method: "POST",
-		body: JSON.stringify({ book: { title, author, isbn } }),
+		body: JSON.stringify({ book }),
 		headers: { "Content-Type": "application/json" },
 	});
 }
 
-export async function updateBook(id: number, title: string, author: string, isbn: number) {
+export async function updateBook(id: number, book: BookForm) {
 	return await fetch(`${URI}/books/${id}`, {
 		method: "PATCH",
-		body: JSON.stringify({ book: { title, author, isbn } }),
+		body: JSON.stringify({ book }),
 		headers: { "Content-Type": "application/json" },
 	});
 }
@@ -50,18 +50,18 @@ export async function deleteCopy(id: number) {
 	return await fetch(`${URI}/copies/${id}`, { method: "DELETE" });
 }
 
-export async function createCopy(book_id: number, borrower: string, due_date: string) {
+export async function createCopy(book_id: number, copy: CopyForm) {
 	return await fetch(`${URI}/books/${book_id}/copies`, {
 		method: "POST",
-		body: JSON.stringify({ copy: { borrower, due_date } }),
+		body: JSON.stringify({ copy }),
 		headers: { "Content-Type": "application/json" },
 	});
 }
 
-export async function updateCopy(id: number, borrower: string, due_date: string) {
+export async function updateCopy(id: number, copy: CopyForm) {
 	return await fetch(`${URI}/copies/${id}`, {
 		method: "PATCH",
-		body: JSON.stringify({ copy: { borrower, due_date } }),
+		body: JSON.stringify({ copy }),
 		headers: { "Content-Type": "application/json" },
 	});
 }

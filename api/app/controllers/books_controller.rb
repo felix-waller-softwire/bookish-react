@@ -9,13 +9,13 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.create(book_params)
-    render json: { id: @book.id }
+    book = Book.create(book_params)
+    render json: { id: book.id }
   end
 
   def update
-    @book = Book.find(params[:id])
-    @book.update(book_params)
+    book = Book.find(params[:id])
+    book.update(book_params)
     head :no_content
   end
 
@@ -27,6 +27,6 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :author, :isbn)
+    params.require(:book).permit(:title, :author, :isbn, :total_copies)
   end
 end

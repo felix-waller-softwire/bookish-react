@@ -13,7 +13,7 @@ export default function CopyForm() {
 
   const [borrower, setBorrower] = useState(copy?.borrower ?? "");
   const [dueDate, setDueDate] = useState(copy?.due_date ?? "");
-  
+
   return (
     <form onSubmit={isUpdate ? onUpdate : onCreate}>
       <label htmlFor="borrower">Borrower</label>
@@ -27,7 +27,7 @@ export default function CopyForm() {
   async function onUpdate(e: FormEvent<HTMLFormElement>) {
     if (!copy) return onCreate(e);
     e.preventDefault();
-    const res = await updateCopy(copy.id, borrower, dueDate);
+    const res = await updateCopy(copy.id, { borrower, due_date: dueDate });
     if (!res.ok) return toast.error("Failed to update copy.");
     toast.success("Updated copy.");
     navigate(`/${bookId}`);
@@ -35,8 +35,13 @@ export default function CopyForm() {
 
   async function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const res = await createCopy(Number(bookId), borrower, dueDate);
-    if (!res.ok) return toast.error("Failed to check out book.");
+    const res = await createCopy(Number(bookId), { borrower, due_date: dueDate });
+
+    if (!res.ok) {
+      const body = await res.json();
+      return toast.error(body?.error ?? "Failed to check out book.");
+    }
+
     toast.success("Checked out book.");
     navigate(`/${bookId}`);
   }
