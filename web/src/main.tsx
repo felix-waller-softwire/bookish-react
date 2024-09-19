@@ -21,7 +21,7 @@ const router = createBrowserRouter([
       {
         path: "/:id",
         element: <Book />,
-        loader: async ({ params }) => fetchBook(params.id),
+        loader: async ({ params }) => fetchBook(Number(params.id ?? 0)),
       },
       {
         path: "/create",
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       {
         path: "/:id/update",
         element: <BookForm key="update" />,
-        loader: async ({ params }) => fetchBook(params.id),
+        loader: async ({ params }) => fetchBook(Number(params.id ?? 0)),
       },
       {
         path: "/:bookId/check-out",
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       {
         path: "/:bookId/copy/:id/update",
         element: <CopyForm />,
-        loader: async ({ params }) => fetchCopy(params.id),
+        loader: async ({ params }) => fetchCopy(Number(params.id ?? 0)),
       }
     ]
   },
@@ -49,4 +49,4 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RouterProvider router={router} />
   </StrictMode>,
-)
+);

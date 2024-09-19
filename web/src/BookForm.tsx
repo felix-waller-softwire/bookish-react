@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { createBook, updateBook } from "./api.ts";
+import { BookResponse } from "./types.ts";
 
 export default function BookForm() {
   const navigate = useNavigate();
-  const book = useLoaderData();
+  const book = useLoaderData() as BookResponse | undefined;
 
   const isUpdate = Boolean(book?.title);
 
@@ -25,20 +26,20 @@ export default function BookForm() {
     </form>
   );
 
-  async function onUpdate(e) {
+  async function onUpdate(e: FormEvent<HTMLFormElement>) {
+    if (!book) return onCreate(e);
     e.preventDefault();
-
-    const res = await updateBook(book.id, title, author, isbn);
+    const res = await updateBook(book.id, title, author, Number(isbn));
     if (!res.ok) return toast.error("Failed to update book.");
 
     toast.success(`Updated "${title}".`)
     navigate(`/${book.id}`);
   }
 
-  async function onCreate(e) {
+  async function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const res = await createBook(title, author, isbn)
+    const res = await createBook(title, author, Number(isbn))
     if (!res.ok) return toast.error("Failed to create book.");
 
     const { id } = await res.json();

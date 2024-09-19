@@ -3,9 +3,10 @@ import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { deleteBook, fetchCopies } from "./api.ts";
 import Copies from "./Copies.tsx";
+import { BookResponse } from "./types.ts";
 
 export default function Book() {
-  const { id, title, author, isbn, copies: fetchedCopies } = useLoaderData();
+  const { id, title, author, isbn, copies: fetchedCopies } = useLoaderData() as BookResponse;
   const [ copies, setCopies ] = useState(fetchedCopies);
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ export default function Book() {
 
       <h2>copies</h2>
       <Link to="./check-out">Check out</Link>
-      <Copies copies={copies} onChange={onCopiesChange} />
+      {copies && <Copies copies={copies} onChange={onCopiesChange} />}
     </>
   );
 

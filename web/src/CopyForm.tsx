@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { createCopy, updateCopy } from "./api.ts";
+import { CopyResponse } from "./types.ts";
 
 export default function CopyForm() {
   const { bookId } = useParams();
   const navigate = useNavigate();
-  const copy = useLoaderData();
+  const copy = useLoaderData() as CopyResponse | undefined;
 
   const isUpdate = Boolean(copy?.id);
 
@@ -23,7 +24,8 @@ export default function CopyForm() {
     </form>
   );
 
-  async function onUpdate(e) {
+  async function onUpdate(e: FormEvent<HTMLFormElement>) {
+    if (!copy) return onCreate(e);
     e.preventDefault();
     const res = await updateCopy(copy.id, borrower, dueDate);
     if (!res.ok) return toast.error("Failed to update copy.");
@@ -31,9 +33,9 @@ export default function CopyForm() {
     navigate(`/${bookId}`);
   }
 
-  async function onCreate(e) {
+  async function onCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const res = await createCopy(bookId, borrower, dueDate);
+    const res = await createCopy(Number(bookId), borrower, dueDate);
     if (!res.ok) return toast.error("Failed to check out book.");
     toast.success("Checked out book.");
     navigate(`/${bookId}`);
