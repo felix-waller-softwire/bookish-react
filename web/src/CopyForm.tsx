@@ -13,13 +13,24 @@ export default function CopyForm() {
 
   const [borrower, setBorrower] = useState(copy?.borrower ?? "");
   const [dueDate, setDueDate] = useState(copy?.due_date ?? "");
+  const [errors, setErrors] = useState<Record<string, string>>();
+
+  const errorStyle = { color: "red"};
 
   return (
     <form onSubmit={isUpdate ? onUpdate : onCreate}>
-      <label htmlFor="borrower">Borrower</label>
-      <input type="text" id="borrower" required value={borrower} onChange={(e) => setBorrower(e.target.value)} />
-      <label htmlFor="due-date">Due date</label>
-      <input type="date" id="due-date" required value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+      <div>
+        { errors?.borrower && <p style={errorStyle}>Borrower {errors.borrower}</p>}
+        <label htmlFor="borrower">Borrower</label>
+        <input type="text" id="borrower" required value={borrower} onChange={(e) => setBorrower(e.target.value)} />
+      </div>
+
+      <div>
+        { errors?.due_date && <p style={errorStyle}>Due date {errors.due_date}</p>}
+        <label htmlFor="due-date">Due date</label>
+        <input type="date" id="due-date" required value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+      </div>
+
       <button type="submit">{isUpdate ? "Update" : "Check out"}</button>
     </form>
   );
@@ -28,7 +39,13 @@ export default function CopyForm() {
     if (!copy) return onCreate(e);
     e.preventDefault();
     const res = await updateCopy(copy.id, { borrower, due_date: dueDate });
-    if (!res.ok) return toast.error("Failed to update copy.");
+
+    if (!res.ok) {
+      const body = await res.json();
+      setErrors(body?.errors);
+      return toast.error("Failed to update copy.");
+    }
+
     toast.success("Updated copy.");
     navigate(`/${bookId}`);
   }
@@ -39,7 +56,8 @@ export default function CopyForm() {
 
     if (!res.ok) {
       const body = await res.json();
-      return toast.error(body?.error ?? "Failed to check out book.");
+      setErrors(body?.errors);
+      return toast.error("Failed to check out book.");
     }
 
     toast.success("Checked out book.");

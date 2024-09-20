@@ -9,19 +9,27 @@ class CopiesController < ApplicationController
 
   def create
     book = Book.find(params[:book_id])
+    copy = book.copies.new(copy_params)
 
-    if book.copies.size >= book.total_copies
-      return render json: {error: "No copies available."}, status: :unprocessable_entity
+    if copy.save
+      render json: { id: copy.id }
+    else
+      render(
+        json: { errors: copy.errors },
+        status: :unprocessable_entity)
     end
-
-    copy = book.copies.create(copy_params)
-    render json: { id: copy.id }
   end
 
   def update
     copy = Copy.find(params[:id])
-    copy.update(copy_params)
-    head :no_content
+
+    if copy.update(copy_params)
+      head :no_content
+    else
+      render(
+        json: { errors: copy.errors },
+        status: :unprocessable_entity)
+    end
   end
 
   def destroy
