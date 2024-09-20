@@ -9,14 +9,29 @@ class BooksController < ApplicationController
   end
 
   def create
-    book = Book.create(book_params)
-    render json: { id: book.id }
+    book = Book.new(book_params)
+
+    if book.save
+      render json: { id: book.id }
+    else
+      render(
+        json: { errors: book.errors },
+        status: :unprocessable_entity,
+      )
+    end
   end
 
   def update
     book = Book.find(params[:id])
-    book.update(book_params)
-    head :no_content
+
+    if book.update(book_params)
+      head :no_content
+    else
+      render(
+        json: { errors: book.errors },
+        status: :unprocessable_entity,
+      )
+    end
   end
 
   def destroy
