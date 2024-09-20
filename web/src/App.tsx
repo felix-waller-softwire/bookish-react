@@ -1,12 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Books from './Books';
+import { Link, Outlet } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
-      <h1>Bookish</h1>
+      <header>
+        <nav>
+          <Link to={"/"}>Books</Link>{" "}
+          <Link to={"/create"}>Create</Link>
+        </nav>
+      </header>
+      <Outlet />
+      <Toaster />
     </>
   )
 }
